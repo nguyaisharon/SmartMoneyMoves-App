@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PremiumFeatures() {
+export default function premiumfeatures() {
   return (
     <div className="p-6 rounded-xl shadow bg-white">
       <h2 className="text-2xl font-bold mb-4 text-indigo-600">Premium Features</h2>
