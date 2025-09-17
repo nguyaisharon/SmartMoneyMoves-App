@@ -3,7 +3,7 @@ The SmartMoneyMoves application is a full-stack web platform designed to empower
 
 
 Features
-Core Features
+
 
 User Authentication: Sign-up, login, and logout using Supabase.
 
