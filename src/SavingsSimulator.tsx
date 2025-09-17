@@ -1,31 +1,26 @@
-// src/SavingsSimulator.tsx
 import React, { useState } from 'react';
 
 const SavingsSimulator: React.FC = () => {
-  const [monthly, setMonthly] = useState(1000);
-  const [years, setYears] = useState(1);
+  const [monthly, setMonthly] = useState<number>(1000);
+  const [years, setYears] = useState<number>(1);
   const [futureValue, setFutureValue] = useState<number | null>(null);
 
-  const calculateFV = () => {
-    const rate = 0.14; // 14% annual rate
-    const months = years * 12;
-    let fv = 0;
-
-    for (let i = 1; i <= months; i++) {
-      fv = (fv + monthly) * (1 + rate / 12);
-    }
-
+  const calculateSavings = () => {
+    const r = 0.14 / 12; // monthly interest
+    const n = years * 12;
+    const fv = monthly * ((Math.pow(1 + r, n) - 1) / r);
     setFutureValue(fv);
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col sm:flex-row gap-3 items-center">
-        <label className="font-medium">Monthly Contribution:</label>
+    <div className="bg-white rounded shadow p-6">
+      <h3 className="text-xl font-bold mb-4 text-blue-600">Savings Simulator</h3>
+      <div className="mb-4">
+        <label className="block mb-1 font-semibold">Monthly Contribution</label>
         <select
-          className="border p-2 rounded"
           value={monthly}
           onChange={(e) => setMonthly(Number(e.target.value))}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
         >
           <option value={1000}>1,000</option>
           <option value={5000}>5,000</option>
@@ -34,37 +29,32 @@ const SavingsSimulator: React.FC = () => {
         </select>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 items-center">
-        <label className="font-medium">Number of Years:</label>
+      <div className="mb-4">
+        <label className="block mb-1 font-semibold">Number of Years</label>
         <input
           type="number"
           min={1}
-          max={50}
-          className="border p-2 rounded w-24"
           value={years}
           onChange={(e) => setYears(Number(e.target.value))}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
         />
       </div>
 
       <button
-        onClick={calculateFV}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        onClick={calculateSavings}
+        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
       >
         Calculate Future Value
       </button>
 
       {futureValue !== null && (
-        <div className="mt-4 p-4 bg-gray-100 rounded shadow">
-          <p className="font-semibold">
-            Estimated Savings after {years} year(s):
-          </p>
-          <p className="text-green-600 text-lg font-bold">
-            KSh {futureValue.toFixed(2)}
-          </p>
-        </div>
+        <p className="mt-4 font-semibold text-green-600">
+          Future Value: KSh {futureValue.toFixed(2)}
+        </p>
       )}
     </div>
   );
 };
 
 export default SavingsSimulator;
+
