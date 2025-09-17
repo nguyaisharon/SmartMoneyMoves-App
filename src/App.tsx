@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SavingsSimulator from './SavingsSimulator';
-import PremiumFeatures from './components/premiumfeatures';
+import PremiumFeatures from './components/PremiumFeatures';
+
 
 const App: React.FC = () => {
   const [user, setUser] = useState<string | null>(null); // Logged-in username
