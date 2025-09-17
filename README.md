@@ -1,6 +1,7 @@
 # SmartMoneyMoves-App
 The SmartMoneyMoves application is a full-stack web platform designed to empower individuals and groups to manage their finances effectively. Built with React for a responsive and dynamic frontend and powered by Supabase as a robust backend, the app offers a secure and seamless user experience. It serves as a central hub for chama (group savings) management, providing users with tools to track contributions, view real-time statistics, and collaborate with their peers. At its core, SmartMoney aims to demystify financial planning by including an interactive savings simulator and a clear path for users to access premium features.
 
+
 Features
 Core Features
 
