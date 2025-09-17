@@ -1,79 +1,39 @@
-import React, { useState } from 'react';
-import Dashboard from './Dashboard';
-import SavingsSimulator from './SavingsSimulator';
+import Auth from './components/Auth';
 
-
-const App: React.FC = () => {
-  const [user, setUser] = useState<string | null>(null); // Logged-in username
-  const [page, setPage] = useState<'login' | 'dashboard'>('login');
-  const [plan, setPlan] = useState<'free' | 'premium'>('free');
-
-  const handleLogin = (username: string) => {
-    setUser(username);
-    setPage('dashboard');
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setPage('login');
-  };
-
+const App = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-100">
-      {page === 'login' && (
-        <div className="flex items-center justify-center h-screen bg-[url('https://images.unsplash.com/photo-1556740763-2e6a68aa7f42?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
-          <div className="bg-white bg-opacity-90 p-8 rounded shadow-lg w-full max-w-md">
-            <h1 className="text-3xl font-bold mb-6 text-blue-600 text-center">SmartMoney</h1>
-            <input
-              type="text"
-              placeholder="Enter Username"
-              className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-              onChange={(e) => setUser(e.target.value)}
-            />
-            <button
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-              onClick={() => user && handleLogin(user)}
-            >
-              Sign In
-            </button>
-            <p className="mt-4 text-center text-gray-600">
-              Free plan active. Upgrade for premium features.
-            </p>
-          </div>
-        </div>
-      )}
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Left side with branding and value proposition */}
+      <div className="hidden lg:flex flex-col justify-center items-center w-full lg:w-1/2 p-12 bg-green-50 text-green-900">
+        <h1 className="text-5xl font-extrabold tracking-tight text-center">
+          <span className="block">Manage Your Chamas</span>
+          <span className="block text-green-600">Smartly</span>
+        </h1>
+        <p className="mt-6 max-w-xl text-lg text-center">
+          Create, manage, and grow your investment groups with powerful tools designed for modern chama management.
+        </p>
+        <ul className="mt-8 space-y-4 text-lg text-left">
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="ml-3">Group Management</span>
+          </li>
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="ml-3">Smart Analytics</span>
+          </li>
+        </ul>
+      </div>
 
-      {page === 'dashboard' && user && (
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-blue-600">Welcome, {user}</h2>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Dashboard />
-            </div>
-            <div>
-              <SavingsSimulator />
-            </div>
-          </div>
-
-          <div className="mt-8">
-            {plan === 'free' && <PremiumFeatures />}
-          </div>
-        </div>
-      )}
+      {/* Right side with the authentication form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <Auth />
+      </div>
     </div>
   );
 };
 
 export default App;
-
-
-
