@@ -1,97 +1,39 @@
-import { useState } from 'react';
+import Auth from './components/Auth';
 
-const Auth = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
+const App = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-          Create Account
-        </h2>
-        <p className="mt-2 text-sm text-gray-600">
-          Start managing your chamas today
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Left side with branding and value proposition */}
+      <div className="hidden lg:flex flex-col justify-center items-center w-full lg:w-1/2 p-12 bg-green-50 text-green-900">
+        <h1 className="text-5xl font-extrabold tracking-tight text-center">
+          <span className="block">Manage Your Chamas</span>
+          <span className="block text-green-600">Smartly</span>
+        </h1>
+        <p className="mt-6 max-w-xl text-lg text-center">
+          Create, manage, and grow your investment groups with powerful tools designed for modern chama management.
         </p>
+        <ul className="mt-8 space-y-4 text-lg text-left">
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="ml-3">Group Management</span>
+          </li>
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="ml-3">Smart Analytics</span>
+          </li>
+        </ul>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirm-password"
-                  name="confirm-password"
-                  type="password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                Create Account
-              </button>
-            </div>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <a href="#" className="font-medium text-green-600 hover:text-green-500">
-              Sign In
-            </a>
-          </p>
-        </div>
+      {/* Right side with the authentication form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <Auth />
       </div>
     </div>
   );
 };
 
-export default Auth;
+export default App;
