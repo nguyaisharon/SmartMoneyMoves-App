@@ -14,7 +14,8 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: path.resolve(__dirname, 'index.html'),
-      external: ['/src/main.tsx'],
+      // Remove '/src/main.tsx' from external to ensure it is bundled
+      external: [],
     },
   },
   optimizeDeps: {
