@@ -3,16 +3,20 @@ import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SavingsSimulator from './SavingsSimulator';
 import About from './About';
+import PremiumFeatures from './components/PremiumFeatures';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [page, setPage] = useState<'home' | 'dashboard' | 'about'>('home');
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen font-sans bg-gray-50">
       {/* Navigation */}
       <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-blue-600 cursor-pointer" onClick={() => setPage('home')}>
+        <h1
+          className="text-2xl font-bold text-blue-600 cursor-pointer"
+          onClick={() => setPage('home')}
+        >
           SmartMoney
         </h1>
         <div className="flex gap-4">
@@ -41,16 +45,20 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="p-6">
-        {/* Home / Hero Section */}
-        {page === 'home' && !isLoggedIn && (
-          <div className="text-center mt-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
-              Manage Your Chamas and Savings Smartly
+      {/* Hero / Login Page */}
+      {!isLoggedIn && page === 'home' && (
+        <div
+          className="flex items-center justify-center min-h-[80vh] bg-cover bg-center"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1591696331111-5bce639b2a1d?auto=format&fit=crop&w=1470&q=80')`,
+          }}
+        >
+          <div className="bg-white bg-opacity-90 p-10 rounded-xl shadow-lg text-center max-w-md">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Welcome to SmartMoney
             </h2>
-            <p className="text-gray-600 mb-6 max-w-xl mx-auto">
-              SmartMoney helps you track your chamas, simulate savings growth, and explore premium financial features.
+            <p className="text-gray-600 mb-6">
+              Manage your chamas, simulate savings, and explore premium financial features.
             </p>
             <div className="flex justify-center gap-4">
               <button
@@ -67,10 +75,13 @@ const App: React.FC = () => {
               </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Dashboard */}
-        {isLoggedIn && page === 'home' && (
+      {/* Dashboard + Features */}
+      {isLoggedIn && page === 'home' && (
+        <main className="p-6 max-w-6xl mx-auto">
+          {/* Dashboard + Savings Simulator */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
             <Dashboard />
             <div>
@@ -78,11 +89,14 @@ const App: React.FC = () => {
               <SavingsSimulator />
             </div>
           </div>
-        )}
 
-        {/* About Page */}
-        {page === 'about' && <About />}
-      </main>
+          {/* Premium Features */}
+          <PremiumFeatures />
+        </main>
+      )}
+
+      {/* About Page */}
+      {page === 'about' && <About />}
 
       {/* Footer */}
       <footer className="bg-white shadow-inner mt-16 p-4 text-center text-gray-500">
@@ -93,3 +107,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+
