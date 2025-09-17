@@ -49,10 +49,11 @@ const App: React.FC = () => {
         // Login / Sign-up For<div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4">{isLogin ? 'Sign In' : 'Sign Up'}</h2>
           <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 mb-3 border rounded"
-            value={email}
+  type="email"
+  placeholder="Email"
+  className="w-full p-2 mb-3 border rounded"
+/>
+      value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
