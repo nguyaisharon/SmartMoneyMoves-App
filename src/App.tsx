@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import SavingsSimulator from './SavingsSimulator';
-import PremiumFeatures from './components/PremiumFeatures';
 
 
 const App: React.FC = () => {
@@ -75,4 +74,6 @@ const App: React.FC = () => {
 };
 
 export default App;
+<PremiumFeatures />
+
 
