@@ -1,32 +1,40 @@
-// src/App.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient, Session, User } from '@supabase/supabase-js';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import SavingsSimulator from './SavingsSimulator';
-import { createClient } from '@supabase/supabase-js';
+import About from './About';
+import './index.css';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const App: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
+function App() {
+  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [authMode, setAuthMode] = useState<'signIn' | 'signUp'>('signIn');
 
-  // Handle login or sign up
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setUser(data?.session?.user ?? null));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session: Session | null) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
   const handleAuth = async () => {
-    if (!email || !password) return alert('Enter email and password');
-
-    if (isLogin) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return alert(error.message);
-      setUser(data.user);
+    setLoading(true);
+    let error;
+    if (authMode === 'signIn') {
+      ({ error } = await supabase.auth.signInWithPassword({ email, password }));
     } else {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-      if (error) return alert(error.message);
-      setUser(data.user);
+      ({ error } = await supabase.auth.signUp({ email, password }));
     }
+    if (error) alert(error.message);
+    setLoading(false);
   };
 
   const handleLogout = async () => {
@@ -34,92 +42,74 @@ const App: React.FC = () => {
     setUser(null);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4">
-      <header className="w-full max-w-md mb-6 text-center">
-        <h1 className="text-4xl font-bold text-blue-600 mb-2">SmartMoney</h1>
-        {!user && (
-          <p className="text-gray-600">
-            Manage your chamas, simulate savings & explore premium features
-          </p>
-        )}
-      </header>
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-indigo-600">
+        <div className="bg-white rounded-2xl shadow-lg p-10 w-96">
+          <h1 className="text-4xl font-extrabold text-center mb-6 text-indigo-600">SmartMoney</h1>
 
-      {!user ? (
-        // Login / Sign-up For<div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">{isLogin ? 'Sign In' : 'Sign Up'}</h2>
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={() => setAuthMode('signIn')}
+              className={`px-4 py-2 rounded-tl-xl rounded-bl-xl font-semibold ${
+                authMode === 'signIn' ? 'bg-indigo-600 text-white' : 'bg-gray-200'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setAuthMode('signUp')}
+              className={`px-4 py-2 rounded-tr-xl rounded-br-xl font-semibold ${
+                authMode === 'signUp' ? 'bg-indigo-600 text-white' : 'bg-gray-200'
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
+
           <input
-  type="email"
-  placeholder="Email"
-  className="w-full p-2 mb-3 border rounded"
-/>
-      value={email}
+            type="email"
+            placeholder="Email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="border p-3 w-full rounded mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-2 mb-4 border rounded"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="border p-3 w-full rounded mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
+
           <button
             onClick={handleAuth}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white p-3 rounded font-semibold hover:bg-indigo-700 transition-colors"
           >
-            {isLogin ? 'Login' : 'Sign Up'}
+            {loading
+              ? authMode === 'signIn'
+                ? 'Signing in...'
+                : 'Signing up...'
+              : authMode === 'signIn'
+              ? 'Sign In'
+              : 'Sign Up'}
           </button>
-          <p className="mt-3 text-sm text-gray-500 text-center">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <span
-              className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              {isLogin ? 'Sign Up' : 'Login'}
-            </span>
-          </p>
         </div>
-      ) : (
-        // Dashboard + Features
-        <div className="w-full max-w-4xl flex flex-col gap-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Welcome, {user.email}</h2>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-            >
-              Logout
-            </button>
-          </div>
+      </div>
+    );
+  }
 
-          <Dashboard />
-
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Savings Simulator</h3>
-            <SavingsSimulator />
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Premium Features</h3>
-            <ul className="list-disc list-inside text-gray-700">
-              <li>Unlimited chamas</li>
-              <li>Access to financial knowledge content</li>
-              <li>Paid investment events</li>
-            </ul>
-            <button className="mt-3 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-              Upgrade to Premium
-            </button>
-          </div>
-        </div>
-      )}
-
-      <footer className="mt-10 text-gray-500 text-sm">
-        App published by <strong>Sharon Nguyai</strong>
-      </footer>
-    </div>
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard user={user} onLogout={handleLogout} />} />
+        <Route path="/savings-simulator" element={<SavingsSimulator />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
-
-      
